@@ -1,10 +1,10 @@
 [package]
 name = "get402"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "Client For Building Paid APIs Using Get402.com"
 license-file = "LICENSE.md"
-documentation = "https://get402.com/docs.html"
+documentation = "https://get402.com/docs"
 homepage = "https://get402.com"
 repository = "https://github.com/ProofOfWorkCompany/get402-rust"
 
