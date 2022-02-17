@@ -7,7 +7,6 @@ Build Paid APIs with Ease. This library simplifies offering of APIs that can be 
 
 ```
 cargo install get402
-
 ```
 
 ## Usage
@@ -16,10 +15,7 @@ See https://get402.com/docs.html for complete documentation
 You may import the entire library or load only specific objects as needed
 
 ```
-
 use Get402;
-
-
 ```
 
 ### Authentication
@@ -34,17 +30,12 @@ private key is used to sign requests to get402.com.
 let private_key = env::var("GET402_API_PRIVATE_KEY").unwrap();
 
 let app: Get402::App = Get402::App::load(private_key);
-
-
 ```
 
 #### Generating A New API PrivateKey
 
 ```
-
 let app: Get402::App = Get402::App::generate();
-
-
 ```
 
 One you load your app using its private key there is no more work to do, all signing of requests is handled
@@ -57,23 +48,17 @@ All clients start with a balance of zero credits available, which can be queried
 #### Creating a New Client
 
 ```
-
 let client: Get402::Client = app.create_client();
-
-
 ```
 
 #### Getting Balance For An Existing Client
 
 ```
-
 let client_identifier = env::var("GET402_API_CLIENT_IDENTIFIER").unwrap();
 
-let client = app.get_client_from_identifier();
+let client = app.get_client_from_identifier(&client_identifier);
 
 let balance: u64 = client.get_balance().await.unwrap();
-
-
 ```
 
 ### Charge Client API Key
@@ -81,7 +66,6 @@ let balance: u64 = client.get_balance().await.unwrap();
 When a client uses your API you should charge their API key which reduces their available balance of credits.
 
 ```
-
 let client = app.get_client_from_identifier();
 
 let mut params = HashMap::new();
@@ -89,14 +73,12 @@ let mut params = HashMap::new();
 params.insert("credits", 1);
 
 let response = client.charge_credit(&params);
-
 ```
 
 If their balance of credits goes to zero you will receive an error including a PaymentRequired request with details
 on purchasing additional credits. If you do not want to receive an error here always check the balance first.
 
 ```
-
 match client.charge_credit(&params).await {
 
     Err(Get402::APIError::InsufficientFunds(payment_request)) => {
@@ -115,8 +97,6 @@ match client.charge_credit(&params).await {
        println!("Unexpected Error Occurred!");
     }
 }
-
-
 ```
 
 
@@ -128,9 +108,7 @@ To purchase additional credits simply request a new payment template for any num
 standard payment request which wallets know how to fulfill.
 
 ```
-
 let payment_request: PaymentRequired = client.request_buy_credits(10).await.unwrap();
-
 ```
 
 
