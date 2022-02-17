@@ -11,10 +11,13 @@ cargo install get402
 ```
 
 ## Usage
+See https://get402.com/docs.html for complete documentation
 
 You may import the entire library or load only specific objects as needed
 
 ```
+
+use Get402;
 
 
 ```
@@ -26,7 +29,11 @@ private key is used to sign requests to get402.com.
 
 #### Using Existing API Private Key
 
+
 ```
+let private_key = env::var("GET402_API_PRIVATE_KEY").unwrap();
+
+let app: Get402::App = Get402::App::load(private_key);
 
 
 ```
@@ -34,6 +41,8 @@ private key is used to sign requests to get402.com.
 #### Generating A New API PrivateKey
 
 ```
+
+let app: Get402::App = Get402::App::generate();
 
 
 ```
@@ -49,12 +58,20 @@ All clients start with a balance of zero credits available, which can be queried
 
 ```
 
+let client: Get402::Client = app.create_client();
+
 
 ```
 
 #### Getting Balance For An Existing Client
 
 ```
+
+let client_identifier = env::var("GET402_API_CLIENT_IDENTIFIER").unwrap();
+
+let client = app.get_client_from_identifier();
+
+let balance: u64 = client.get_balance().await.unwrap();
 
 
 ```
@@ -65,6 +82,13 @@ When a client uses your API you should charge their API key which reduces their 
 
 ```
 
+let client = app.get_client_from_identifier();
+
+let mut params = HashMap::new();
+
+params.insert("credits", 1);
+
+let response = client.charge_credit(&params);
 
 ```
 
@@ -72,6 +96,25 @@ If their balance of credits goes to zero you will receive an error including a P
 on purchasing additional credits. If you do not want to receive an error here always check the balance first.
 
 ```
+
+match client.charge_credit(&params).await {
+
+    Err(Get402::APIError::InsufficientFunds(payment_request)) => {
+
+        println!("Insufficient Funds!");
+        // payment_request  includes outputs array, paymentUrl, and memo
+    }
+
+    Ok() => {
+
+      println!("Sufficient Credit For Call");
+
+    }
+
+    other => {
+       println!("Unexpected Error Occurred!");
+    }
+}
 
 
 ```
@@ -86,6 +129,7 @@ standard payment request which wallets know how to fulfill.
 
 ```
 
+let payment_request: PaymentRequired = client.request_buy_credits(10).await.unwrap();
 
 ```
 
