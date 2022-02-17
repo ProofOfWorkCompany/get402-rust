@@ -1,6 +1,6 @@
 [package]
 name = "get402"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Client For Building Paid APIs Using Get402.com"
 license-file = "LICENSE.md"
