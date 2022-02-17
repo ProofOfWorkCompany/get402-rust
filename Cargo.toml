@@ -1,5 +1,5 @@
 [package]
-name = "get402-rust"
+name = "get402"
 version = "0.0.1"
 edition = "2021"
 description = "Client Ror Building Paid APIs Using Get402.com"
